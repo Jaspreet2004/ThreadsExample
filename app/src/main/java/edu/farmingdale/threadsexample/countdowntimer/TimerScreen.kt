@@ -1,5 +1,7 @@
 package edu.farmingdale.threadsexample.countdowntimer
 
+import android.media.AudioManager
+import android.media.ToneGenerator
 import android.util.Log
 import android.widget.NumberPicker
 import androidx.compose.animation.core.LinearEasing
@@ -84,6 +86,13 @@ fun TimerScreen(
             sec = timerViewModel.selectedSecond,
             onTimePick = timerViewModel::selectTime
         )
+
+        if (timerViewModel.workFinished) {
+            LaunchedEffect(Unit) {
+                playTimerSound()
+                timerViewModel.resetWorkFinished()
+            }
+        }
 
         if (timerViewModel.isRunning) {
             Row(
@@ -203,4 +212,9 @@ fun NumberPickerWrapper(
             }
         }
     )
+}
+
+private fun playTimerSound() {
+    val toneGen = ToneGenerator(AudioManager.STREAM_ALARM, 100)
+    toneGen.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 1000)
 }

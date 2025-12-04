@@ -24,14 +24,13 @@ class TimerViewModel : ViewModel() {
 
     // Total milliseconds when timer starts
     var totalMillis by mutableLongStateOf(0L)
-        internal set
 
-    // Time that remains
     var remainingMillis by mutableLongStateOf(0L)
-        internal set
+        private set
 
-    // Timer's running status
     var isRunning by mutableStateOf(false)
+        private set
+    var workFinished by mutableStateOf(false)
         private set
 
     fun selectTime(hour: Int, min: Int, sec: Int) {
@@ -47,6 +46,7 @@ class TimerViewModel : ViewModel() {
         // Start coroutine that makes the timer count down
         if (totalMillis > 0) {
             isRunning = true
+            workFinished = false
             remainingMillis = totalMillis
 
             timerJob?.cancel()
@@ -58,6 +58,7 @@ class TimerViewModel : ViewModel() {
 
                 isRunning = false
                 remainingMillis = 0
+                workFinished = true
             }
         }
     }
@@ -67,6 +68,7 @@ class TimerViewModel : ViewModel() {
             timerJob?.cancel()
             isRunning = false
             remainingMillis = 0
+            workFinished = false
         }
     }
 
@@ -74,6 +76,11 @@ class TimerViewModel : ViewModel() {
         timerJob?.cancel()
         isRunning = false
         remainingMillis = totalMillis
+        workFinished = false
+    }
+
+    fun resetWorkFinished() {
+        workFinished = false
     }
 
     override fun onCleared() {
