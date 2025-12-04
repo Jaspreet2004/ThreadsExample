@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -11,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import edu.farmingdale.threadsexample.ui.theme.ThreadsExampleTheme
 
 class MainActivity : ComponentActivity() {
@@ -20,7 +23,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             ThreadsExampleTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting("Android", Modifier.padding(innerPadding))
+                    MainScreen(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
@@ -28,11 +31,20 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+fun MainScreen(modifier: Modifier = Modifier) {
+    Column(modifier = modifier.padding(16.dp)) {
+        FibonacciDemoNoBgThrd()
+        Spacer(modifier = Modifier.padding(top = 16.dp))
+        FibonacciDemoWithCoroutine()
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun MainScreenPreview() {
+    ThreadsExampleTheme {
+        MainScreen()
+    }
 }
 
 // ToDo 1: Call `FibonacciDemoNoBgThrd` that calculates the Fibonacci number of a given number.

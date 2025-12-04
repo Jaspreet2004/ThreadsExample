@@ -24,11 +24,11 @@ class TimerViewModel : ViewModel() {
 
     // Total milliseconds when timer starts
     var totalMillis by mutableLongStateOf(0L)
-        private set
+        internal set
 
     // Time that remains
     var remainingMillis by mutableLongStateOf(0L)
-        private set
+        internal set
 
     // Timer's running status
     var isRunning by mutableStateOf(false)
@@ -49,6 +49,7 @@ class TimerViewModel : ViewModel() {
             isRunning = true
             remainingMillis = totalMillis
 
+            timerJob?.cancel()
             timerJob = viewModelScope.launch {
                 while (remainingMillis > 0) {
                     delay(1000)
@@ -56,6 +57,7 @@ class TimerViewModel : ViewModel() {
                 }
 
                 isRunning = false
+                remainingMillis = 0
             }
         }
     }
@@ -66,6 +68,12 @@ class TimerViewModel : ViewModel() {
             isRunning = false
             remainingMillis = 0
         }
+    }
+
+    fun resetTimer() {
+        timerJob?.cancel()
+        isRunning = false
+        remainingMillis = totalMillis
     }
 
     override fun onCleared() {
